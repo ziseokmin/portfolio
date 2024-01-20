@@ -1,0 +1,240 @@
+$(document).ready(function(){
+	//원페이지 스크롤 이벤트//
+		var win_h = $(window).height();
+
+	$("section").each(function(index){
+		$(this).attr("data-index",win_h * index);
+	});
+
+	$("section").on("mousewheel", function(e){
+		var sectionPos = parseInt($(this).attr("data-index"));
+		if (e.originalEvent.wheelDelta >= 0) {
+			$("html,body").stop().animate({scrollTop:sectionPos - win_h},800);
+			return false;
+		} else if (e.originalEvent.wheelDelta < 0) {
+			$("html,body").stop().animate({scrollTop:sectionPos + win_h},800);
+			return false;
+		}
+	});
+	$( window ).resize(function() {
+
+		var win_h = $(window).height();
+
+	$("section").each(function(index){
+				$(this).attr("data-index",win_h * index);
+			});
+			$("section").on("mousewheel", function(e){
+				var sectionPos = parseInt($(this).attr("data-index"));
+				if (e.originalEvent.wheelDelta >= 0) {
+					$("html,body").stop().animate({scrollTop:sectionPos - win_h},800);
+				return false;
+				} else if (e.originalEvent.wheelDelta < 0) {
+					$("html,body").stop().animate({scrollTop:sectionPos + win_h},800);
+				return false;
+				}
+			});
+	});
+	//홈에서는 안보이게 하기
+	$(function() {
+		$(window).on("scroll", function() {
+			if($(window).scrollTop() > $("#home").height()-100 ) {
+				$(".line").css({"opacity":"1"});
+				$(".scroll_btn").css({"opacity":"1"});
+
+				if ($(window).scrollTop() == ($(document).height() - $(window).height())) {
+					$(".scroll_btn").css({"opacity":"0"});
+				} else {
+					$(".scroll_btn").css({"opacity":"1"});
+				}
+			} else {
+			   $(".line").css({"opacity":"0"});
+			   $(".scroll_btn").css({"opacity":"0"});
+			}
+		});
+	}); 
+	//스크롤 위치값에 따른 텍스트 변경//
+	var isVisible = false;
+
+	$(window).on('scroll',function() {
+		if (checkVisible($('#home'))&&!isVisible) {
+			$(".sub_tit > h4").text("Web Design Portfolio");
+		}
+		if (checkVisible($('#about'))&&!isVisible) {
+			$(".sub_tit > h4").text("About");
+		}
+		if (checkVisible($('#about2'))&&!isVisible) {
+			$(".pro_nav").css({"display":"none"});
+		}
+		if (checkVisible($('#project01'))&&!isVisible) {
+			$(".sub_tit > h4").text("Project001");
+			$(".pro01").addClass("active");
+			$(".pro02").removeClass("active");
+			$(".pro03").removeClass("active");
+			$(".pro04").removeClass("active");
+			$(".pro_nav").css({"display":"block"});
+			$("#project01").css({"opacity":"1"});
+		}
+		if (checkVisible($('#project02'))&&!isVisible) {
+			$(".sub_tit > h4").text("Project002");
+			$(".pro02").addClass("active");
+			$(".pro01").removeClass("active");
+			$(".pro03").removeClass("active");
+			$(".pro04").removeClass("active");
+		}
+		if (checkVisible($('#project03'))&&!isVisible) {
+			$(".sub_tit > h4").text("Project003");
+			$(".pro03").addClass("active");
+			$(".pro01").removeClass("active");
+			$(".pro02").removeClass("active");
+			$(".pro04").removeClass("active");
+			$(".pro_nav").css({"display":"block"});
+		}
+		if (checkVisible($('#project04'))&&!isVisible) {
+			$(".sub_tit > h4").text("Project004");
+			$(".pro04").addClass("active");
+			$(".pro01").removeClass("active");
+			$(".pro02").removeClass("active");
+			$(".pro03").removeClass("active");
+			$(".pro_nav").css({"display":"block"});
+		}
+		if (checkVisible($('#contact'))&&!isVisible) {
+			$(".sub_tit > h4").text("Contact");
+			$(".pro_nav").css({"display":"none"});
+		}
+	});
+	function checkVisible( elm, eval ) {
+		eval = eval || "object visible";
+		var viewportHeight = $(window).height() - 100, // Viewport Height
+			scrolltop = $(window).scrollTop() - 100, // Scroll Top
+			y = $(elm).offset().top,
+			elementHeight = $(elm).height();   
+		
+		if (eval == "object visible") return ((y < (viewportHeight + scrolltop)) && (y > (scrolltop - elementHeight)));
+		if (eval == "above") return ((y < (viewportHeight + scrolltop)));
+	}
+	//스크롤 버튼 클릭시 다음 페이지로 이동//
+	/*$(".next_btn").click(function(){
+		var sectionPos = parseInt($("section").attr("data-index"));
+		var win_h = $(window).height();
+
+		$("html,body").stop().animate({scrollTop:sectionPos + win_h},800);
+		 console.log(sectionPos);
+		 console.log(win_h);
+	});*/
+	//스크롤 시 이벤트 발생//
+	$("#about2").on('mousewheel',function(e){
+		var wheel = e.originalEvent.wheelDelta;
+		var effectTimerId = '';
+		clearTimeout(effectTimerId);
+		$('.fixed-box').removeClass('up down hide-down hide-up');
+		//스크롤값을 가져온다.
+		if(wheel>0){
+		//스크롤 올릴때
+		} else {
+		//스크롤 내릴때
+			effectTimerId = setTimeout(function() {
+				$("#con01").addClass("down");
+			}, 300);
+		}
+	});
+	$("#project01").on('mousewheel',function(e){
+		var wheel = e.originalEvent.wheelDelta;
+		var effectTimerId = '';
+		clearTimeout(effectTimerId);
+		$('.fixed-box').removeClass('up down hide-down hide-up');
+		//스크롤값을 가져온다.
+		if(wheel>0){
+		//스크롤 올릴때
+			$("#con01").addClass("hide-up");
+		} else {
+		//스크롤 내릴때
+			$("#con01").addClass("hide-down");
+			$("#con01").removeClass("down");
+			effectTimerId = setTimeout(function() {
+				$("#con02").addClass('up');
+				$("#con01").removeClass("hide-down");
+			}, 400);
+		}
+	});
+	$("#project02").on('mousewheel',function(e){
+		var wheel = e.originalEvent.wheelDelta;
+		var effectTimerId = '';
+		clearTimeout(effectTimerId);
+		$('.fixed-box').removeClass('up down hide-down hide-up');
+		//스크롤값을 가져온다.
+		if(wheel>0){
+		//스크롤 올릴때
+			$("#con02").addClass("hide-up");
+			effectTimerId = setTimeout(function() {
+				$("#con01").addClass("up");
+			}, 200);
+		} else {
+		//스크롤 내릴때
+			$("#con02").addClass("hide-down");
+			$("#con02").removeClass("down");
+			effectTimerId = setTimeout(function() {
+				$("#con03").addClass('up');
+				$("#con02").removeClass("hide-down");
+			}, 400);
+		}
+	});
+	$("#project03").on('mousewheel',function(e){
+		var wheel = e.originalEvent.wheelDelta;
+		var effectTimerId = '';
+		clearTimeout(effectTimerId);
+		$('.fixed-box').removeClass('up down hide-down hide-up');
+		//스크롤값을 가져온다.
+		if(wheel>0){
+		//스크롤 올릴때
+			$("#con03").addClass("hide-up");
+			effectTimerId = setTimeout(function() {
+				$("#con02").addClass("up");
+			}, 200);
+		} else {
+		//스크롤 내릴때
+			$("#con03").addClass("hide-down");
+			$("#con03").removeClass("down");
+			effectTimerId = setTimeout(function() {
+				$("#con04").addClass('up');
+				$("#con03").removeClass("hide-down");
+			}, 400);
+		}
+	});
+		$("#project04").on('mousewheel',function(e){
+		var wheel = e.originalEvent.wheelDelta;
+		var effectTimerId = '';
+		clearTimeout(effectTimerId);
+		$('.fixed-box').removeClass('up down hide-down hide-up');
+		//스크롤값을 가져온다.
+		if(wheel>0){
+		//스크롤 올릴때
+			$("#con04").addClass("hide-up");
+			effectTimerId = setTimeout(function() {
+				$("#con03").addClass("up");
+			}, 200);
+		} else {
+		//스크롤 내릴때
+			$("#con04").addClass("hide-down");
+			$("#con04").removeClass("down");
+			effectTimerId = setTimeout(function() {
+				$("#con03").addClass('up');
+				$("#con04").removeClass("hide-down");
+			}, 400);
+		}
+	});
+	$("#contact").on('mousewheel',function(e){
+		var wheel = e.originalEvent.wheelDelta;
+		var effectTimerId = '';
+		clearTimeout(effectTimerId);
+		$('.fixed-box').removeClass('up down hide-down hide-up');
+		//스크롤값을 가져온다.
+		if(wheel>0){
+			effectTimerId = setTimeout(function() {
+				$("#con04").addClass("down");
+			}, 300);
+		//스크롤 올릴때
+		} else {
+		//스크롤 내릴때
+		}
+	});
+});
